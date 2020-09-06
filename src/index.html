@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #game {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+    }
+
+    canvas {
+      image-rendering: pixelated;
+      /* if sprites are still blurry, add this */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <h1>Resize</h1> -->
+  <div id="game">
+    <canvas id="canvas"></canvas>
+  </div>
+  <script src="main.js"></script>
+</body>
+
+</html>
