@@ -34,34 +34,34 @@ let cWidth = nWidth;
 function buildMap() {
   for (let row = 0; row < map[0].length; row++) {
     for (let col = 0; col < map.length; col++) {
-      const cell = { srcX: null, srcY: 0, x: null, y: null };
+      const tile = { srcX: null, srcY: 0, x: null, y: null };
       switch (map[col][row]) {
         case topLeftCorner:
-          cell.srcX = 0;
+          tile.srcX = 0;
           break;
         case topRightCorner:
-          cell.srcX = 8;
+          tile.srcX = 8;
           break;
         case bottomLeftCorner:
-          cell.srcX = 16;
+          tile.srcX = 16;
           break
         case bottomRightCorner:
-          cell.srcX = 24;
+          tile.srcX = 24;
           break;
         case horMiddle:
-          cell.srcX = 32;
+          tile.srcX = 32;
           break;
         case vertMiddle:
-          cell.srcX = 40;
+          tile.srcX = 40;
           break;
         case floor:
-          cell.srcX = 48;
+          tile.srcX = 48;
       }
 
-      cell.x = row * SIZE;
-      cell.y = col * SIZE;
+      tile.x = row * SIZE;
+      tile.y = col * SIZE;
 
-      cells.push(cell);
+      tiles.push(tile);
     }
   }
 }
