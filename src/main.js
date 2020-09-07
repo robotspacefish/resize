@@ -1,9 +1,11 @@
 const ctx = document.getElementById('canvas').getContext('2d');
 
-const spritesheet = new Image();
-spritesheet.src = './resize.png';
+const tilesheet = new Image();
+tilesheet.src = './resize.png';
 
-let cells = [];
+// the sprites that make up the game map
+let tiles = [];
+
 const topLeftCorner = 1,
   topRightCorner = 2,
   bottomLeftCorner = 3,
@@ -20,13 +22,26 @@ const map = [
   [3, 5, 5, 5, 5, 5, 4]
 ];
 
+// size of each 'tile'
 const SIZE = 8;
+
+// native width and height does not change
 const nHeight = SIZE * map.length;
 const nWidth = SIZE * map[0].length;
 
-const maxWidth = nWidth * 10;
-const maxHeight = nHeight * 10;
+// max width/height you want the map to be, if you have a large display and don't want
+// the canvas to get that big
+// I just picked 20 at random here.
+// In this instance maxWidth = 56 * 20 = 1,120 and maxHeight = 40 * 20 = 800
+const maxMultiplier = 10;
+const maxWidth = nWidth * maxMultiplier;
+const maxHeight = nHeight * maxMultiplier;
 
+// % of browser window to be taken up by the canvas
+const windowPercentage = 0.9;
+
+// the canvas' displayed width/height
+// this is what changes when the window is resized
 let cHeight = nHeight;
 let cWidth = nWidth;
 
@@ -73,31 +88,33 @@ function resize() {
   const nativeRatio = nWidth / nHeight;
   const browserWindowRatio = cWidth / cHeight;
 
-  // if browserWindowRatio > nativeRatio , the browser is too wide
+  // the browser window is too wide
   if (browserWindowRatio > nativeRatio) {
-    // take up 90% of window height divisible by cell size
+    // take up 90% of window height divisible by tile size
     // height must be changed first since width is based on it
-    cHeight = Math.floor(cHeight * 0.9 * SIZE) * SIZE;
-    if (cHeight > maxWidth) cHeight = maxHeight;
+    cHeight = Math.floor(cHeight * windowPercentage);
+    // if (cHeight > maxWidth) cHeight = maxHeight;
     cWidth = Math.floor(cHeight * nativeRatio);
   } else {
     // browser window is too high
-    // take up 90% of window width divisible by cell size
+    // take up 90% of window width divisible by tile size
     // width must be changed first since height is based on it
-    cWidth = Math.floor(cWidth * 0.9 / SIZE) * SIZE;
-    if (cWidth > maxWidth) cWidth = maxWidth;
+    cWidth = Math.floor(cWidth * windowPercentage);
+    // if (cWidth > maxWidth) cWidth = maxWidth;
     cHeight = Math.floor(cWidth / nativeRatio);
   }
 
+
+  // set the canvas style width and height to the new width and height
   ctx.canvas.style.width = `${cWidth}px`;
   ctx.canvas.style.height = `${cHeight}px`;
-
-  ctx.imageSmoothingEnabled = false;
+  // ctx.imageSmoothingEnabled = false;
+  console.log(ctx.canvas.style.height, ctx.canvas.style.width)
 }
 
 function render() {
-  cells.forEach(cell => {
-    ctx.drawImage(spritesheet, cell.srcX, cell.srcY, SIZE, SIZE, cell.x, cell.y, SIZE, SIZE)
+  tiles.forEach(tile => {
+    ctx.drawImage(tilesheet, tile.srcX, tile.srcY, SIZE, SIZE, tile.x, tile.y, SIZE, SIZE)
   })
 }
 
@@ -108,9 +125,9 @@ window.addEventListener('resize', () => {
 
 window.addEventListener('load', () => {
   // initialize native height/width
-  ctx.canvas.width = nWidth;
-  ctx.canvas.height = nHeight;
-  resize();
+  ctx.canvas.width = cWidth;
+  ctx.canvas.height = cHeight;
   buildMap();
+  resize();
   render();
 })
